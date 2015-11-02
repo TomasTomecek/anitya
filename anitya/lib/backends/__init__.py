@@ -227,7 +227,7 @@ class BaseBackend(object):
         return anitya.order_versions(vlist)
 
     @classmethod
-    def call_url(self, url, insecure=False):
+    def call_url(self, url, insecure=False, expect_json=False):
         ''' Dedicated method to query a URL.
 
         It is important to use this method as it allows to query them with
@@ -236,6 +236,8 @@ class BaseBackend(object):
 
         :arg url: the url to request (get).
         :type url: str
+        :arg expect_json: set header Accept to application/json to ensure we'll get a json
+        :type expect_json: bool
         :return: the request object corresponding to the request made
         :return type: Request
         '''
@@ -262,6 +264,8 @@ class BaseBackend(object):
                 'User-Agent': user_agent,
                 'From': from_email,
             }
+            if expect_json:
+                headers['Accept'] = 'application/json'
 
             return requests.get(url, headers=headers, verify=not insecure)
 
